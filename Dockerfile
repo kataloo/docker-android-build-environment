@@ -113,9 +113,6 @@ RUN id $RUN_USER || adduser --uid "$RUN_UID" \
     --disabled-login \
     --disabled-password "$RUN_USER"
 
-# Fix permissions
-RUN chown -R $RUN_USER:$RUN_USER $ANDROID_HOME $ANDROID_SDK_HOME #$ANDROID_NDK_HOME
-RUN chmod -R a+rx $ANDROID_HOME $ANDROID_SDK_HOME #$ANDROID_NDK_HOME
 
 # Install google and support libraries
 RUN echo y | android update sdk --filter "extra-android-m2repository" --no-ui -a
@@ -127,7 +124,9 @@ RUN echo -e "\n8933bad161af4178b1185d1a37fbf41ea5269c55" > "$ANDROID_SDK_HOME/li
 RUN echo -e "\n84831b9409646a918e30573bab4c9c91346d8abd" > "$ANDROID_SDK_HOME/licenses/android-sdk-preview-license"
 RUN echo -e "\nd975f751698a77b662f1254ddbeed3901e976f5a" > "$ANDROID_SDK_HOME/licenses/intel-android-extra-license"
 
-RUN chmod -R +w /usr/local/android-sdk/.android
+# Fix permissions
+RUN chown -R $RUN_USER:$RUN_USER $ANDROID_HOME $ANDROID_SDK_HOME #$ANDROID_NDK_HOME
+RUN chmod -R a+rx $ANDROID_HOME $ANDROID_SDK_HOME #$ANDROID_NDK_HOME
 
 # Creating project directories prepared for build when running
 # `docker run`
